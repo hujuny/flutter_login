@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_login/home/tabs_page.dart';
 
 /// 主页面
 class HomePage extends StatefulWidget {
@@ -9,15 +10,8 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("主页面"),
-        ),
-        body: Center(
-          child: Text('我是主页面'),
-        ),
-      ),
+    return MaterialApp(
+      home: TabsPage(),
     );
   }
 }
