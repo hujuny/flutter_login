@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NavigatorUtil {
@@ -8,9 +7,10 @@ class NavigatorUtil {
         context, MaterialPageRoute(builder: (context) => page));
   }
 
+
+
   ///返回上一页面
   static pop(BuildContext context) {
-   return Navigator.pop(context);
+    return Navigator.pop(context);
   }
-
 }

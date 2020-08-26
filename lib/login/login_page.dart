@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           onChanged: (str) {
                             username = str;
-                            if (password.isNotEmpty && username.isNotEmpty) {
+                            if (password.trim().isNotEmpty && username.trim().isNotEmpty) {
                               content = Colors.lightBlueAccent;
                             } else {
                               content = Colors.grey;
@@ -116,8 +116,8 @@ class _LoginPageState extends State<LoginPage> {
                                 obscureText: showPassword,
                                 onChanged: (str) {
                                   password = str;
-                                  if (password.isNotEmpty &&
-                                      username.isNotEmpty) {
+                                  if (password.trim().isNotEmpty &&
+                                      username.trim().isNotEmpty) {
                                     content = Colors.lightBlueAccent;
                                   } else {
                                     content = Colors.grey;
@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: IconButton(
                           onPressed: () {
                             if (content == Colors.lightBlueAccent) {
-//                              Toast.toast(context, msg: "可以登录！");
+                              NavigatorUtil.pop(context);
                             NavigatorUtil.push(context, HomePage());
                             } else {
                               Toast.toast(context, msg: "请输入账号或密码！");

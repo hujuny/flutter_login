@@ -33,10 +33,6 @@ class TabsPageState extends State<TabsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: pageTextList[this.num],
-      ),
       floatingActionButton: Container(
         width: 50,
         height: 50,
