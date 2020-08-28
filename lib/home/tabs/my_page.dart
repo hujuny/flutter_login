@@ -7,7 +7,7 @@ class MyPage extends StatefulWidget {
 }
 
 class MyPageState extends State<MyPage> {
-  List MyList = [
+  List myList = [
     {"title": "推荐给好友", "imageUrl": "images/tuijian.png"},
     {"title": "意见反馈", "imageUrl": "images/suggestion.png"},
     {"title": "信息修改", "imageUrl": "images/change.png"},
@@ -52,51 +52,54 @@ class MyPageState extends State<MyPage> {
             ),
           ),
           Expanded(
-            flex: 1,
-            child: Container(
-              color: Colors.white,
-              margin: EdgeInsets.all(10),
-              child: ListView.separated(
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: Image.asset(
-                        MyList[index]["imageUrl"],
-                        width: 20,
-                        height: 20,
+              child: Padding(
+            padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: Image.asset(
+                      myList[index]["imageUrl"],
+                      width: 20,
+                      height: 20,
+                    ),
+                    title: Text(
+                      myList[index]["title"],
+                      style: TextStyle(
+                        fontSize: 15,
                       ),
-                      title: Text(
-                        MyList[index]["title"],
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 15,
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return Divider(height: 1, color: Colors.grey);
-                  },
-                  itemCount: MyList.length),
-            ),
-          ),
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 15,
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Divider(height: 1, color: Colors.grey);
+                },
+                itemCount: myList.length),
+          )),
           Expanded(
-              child:   Center(child: Container(
-                width: MediaQuery.of(context).size.width,
-                margin: EdgeInsets.only(left: 20,right: 20),
-                child:  RaisedButton(
-                  color: Colors.blue,
-                  child: Padding(padding: EdgeInsets.only(top: 10,bottom: 10),child: Text('退出登录',style: TextStyle(color: Colors.white,fontSize: 20,letterSpacing: 10.0),),),
-                  onPressed: () {
-                    NavigatorUtil.pop(context);
-                    NavigatorUtil.push(context, LoginPage());
-                  },
-
+              child: Center(
+                  child: Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.only(left: 20, right: 20),
+            child: RaisedButton(
+              color: Colors.blue,
+              child: Padding(
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                child: Text(
+                  '退出登录',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: 20, letterSpacing: 10.0),
                 ),
-              ))
-          )
+              ),
+              onPressed: () {
+                NavigatorUtil.pop(context);
+                NavigatorUtil.push(context, LoginPage());
+              },
+            ),
+          )))
         ],
       ),
     );
