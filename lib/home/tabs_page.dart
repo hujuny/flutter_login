@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/home/tabs/categories_page.dart';
 import 'package:flutter_login/home/tabs/contacts_page.dart';
 import 'package:flutter_login/home/tabs/homes_page.dart';
+import 'package:flutter_login/home/tabs/main_page.dart';
 import 'package:flutter_login/home/tabs/my_page.dart';
+import 'package:flutter_login/utils/navigator_util.dart';
 import 'package:flutter_login/utils/toast.dart';
 
 class TabsPage extends StatefulWidget {
@@ -33,6 +35,8 @@ class TabsPageState extends State<TabsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //取消键盘弹起时,背景图片会跟随上移变形的情况,
+      resizeToAvoidBottomInset: false,
       floatingActionButton: Container(
         width: 50,
         height: 50,
@@ -44,7 +48,7 @@ class TabsPageState extends State<TabsPage> {
           backgroundColor: Colors.black,
           child: Icon(Icons.add),
           onPressed: () {
-            Toast.toast(context,msg: "欢迎来到主页面");
+           NavigatorUtil.push(context, MainPage());
           },
         ),
       ),

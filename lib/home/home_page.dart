@@ -13,7 +13,10 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
+
 class HomePageState extends State<HomePage> {
+
+  final GlobalKey<ScaffoldState> _globalKey=new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,6 +31,9 @@ class HomePageState extends State<HomePage> {
         const Locale('zh', 'CH'),
       ],
       home: Scaffold(
+        //取消键盘弹起时,背景图片会跟随上移变形的情况,
+        resizeToAvoidBottomInset: false,
+        key: _globalKey,
         body: TabsPage(),
         drawer: Drawer(
             child: Column(
@@ -74,8 +80,7 @@ class HomePageState extends State<HomePage> {
               title: Text('我的空间'),
               onTap: () {
                 //监听
-                NavigatorUtil.pop(context);
-                NavigatorUtil.push(context, HomePage());
+               Navigator.pop(context);
               },
             ),
             Divider(

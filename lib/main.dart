@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'home/home_page.dart';
 import 'login/login_page.dart';
 
 void main() {
@@ -35,7 +36,8 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         resizeToAvoidBottomPadding: false,
-        body: LoginPage(),
+//        body: LoginPage(),
+        body: HomePage(),
       ),
       //路由配置
       routes: {

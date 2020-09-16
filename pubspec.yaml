@@ -36,7 +36,8 @@ dependencies:
   #菜单选择控件
   flutter_picker:
     git: git://github.com/yangyxd/flutter_picker.git
-
+  # 网络请求
+  dio: ^3.0.10
 
   # 语言国际化
   flutter_localizations:

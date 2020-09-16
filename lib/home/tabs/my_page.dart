@@ -1,6 +1,13 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/home/tabs/bean/app_update_info.dart';
 import 'package:flutter_login/login/login_page.dart';
+import 'package:flutter_login/utils/api.dart';
+import 'package:flutter_login/utils/dio_utils.dart';
 import 'package:flutter_login/utils/navigator_util.dart';
+import 'package:flutter_login/utils/toast.dart';
 
 class MyPage extends StatefulWidget {
   MyPageState createState() => MyPageState();
@@ -15,8 +22,29 @@ class MyPageState extends State<MyPage> {
     {"title": "客服助手", "imageUrl": "images/kefu.png"},
   ];
 
+  ///获取版本信息
+  getUpdateInformation() async {
+    Map<String, dynamic> bodyParams = {};
+    DioUtils.get(bodyParams, url: API.App_Update_Information,
+        onSuccess: (data) {
+      ///获取App版本号参考package_info包
+      if (data['versionCode'] > 1) {
+        showUpdateDialog(data['versionName'], data['description']);
+      } else {
+        Toast.toast(context, msg: "最新版本，无需升级");
+      }
+    }, onError: (error) {
+      Toast.toast(context, msg: "请求失败,请重试！");
+    });
+  }
+
+  showUpdateDialog(versionName, description) {
+
+  }
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -57,6 +85,11 @@ class MyPageState extends State<MyPage> {
             child: ListView.separated(
                 itemBuilder: (context, index) {
                   return ListTile(
+                    onTap: () {
+                      if (index == 3) {
+                        getUpdateInformation();
+                      }
+                    },
                     leading: Image.asset(
                       myList[index]["imageUrl"],
                       width: 20,
