@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_login/home/tabs/homes_page.dart';
 import 'package:flutter_login/home/tabs_page.dart';
 import 'package:flutter_login/utils/navigator_util.dart';
 import 'package:flutter_picker/PickerLocalizationsDelegate.dart';
@@ -19,6 +21,9 @@ class HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _globalKey=new GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    //强制竖屏
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
     return MaterialApp(
       localizationsDelegates: [
         CupertinoLocalizationsDelegate(),
@@ -35,6 +40,8 @@ class HomePageState extends State<HomePage> {
         resizeToAvoidBottomInset: false,
         key: _globalKey,
         body: TabsPage(),
+        ///抽屉导航
+        ///endDrawer右边抽屉
         drawer: Drawer(
             child: Column(
           children: <Widget>[
@@ -50,8 +57,13 @@ class HomePageState extends State<HomePage> {
                     ),
                     decoration: BoxDecoration(color: Colors.yellow),
                     otherAccountsPictures: <Widget>[
-                      Image.network(
-                          "https://www.yanghujun.com/upload/2019/12/heart-5f900bb03cab4755bbac1c7124b03bc8.jpg"),
+                      FadeInImage(
+                        ///动画的时长和动画曲线
+                        fadeOutDuration: Duration(milliseconds: 200),
+                        fadeInCurve: Curves.easeIn,
+                        placeholder: AssetImage("images/tuijian.png"),
+                        image: NetworkImage("https://www.yanghujun.com/upload/2019/12/heart-5f900bb03cab4755bbac1c7124b03bc8.jpg"),
+                      ),
                       Image.network(
                           "https://www.yanghujun.com/upload/2019/12/heart-5f900bb03cab4755bbac1c7124b03bc8.jpg")
                     ],
@@ -80,7 +92,7 @@ class HomePageState extends State<HomePage> {
               title: Text('我的空间'),
               onTap: () {
                 //监听
-               Navigator.pop(context);
+              Navigator.pushAndRemoveUntil(context, new MaterialPageRoute(builder: (context)=>HomePage()), (route) => false);
               },
             ),
             Divider(

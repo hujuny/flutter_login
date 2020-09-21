@@ -2,8 +2,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_login/home/datatable/datatable_demo.dart';
+import 'package:flutter_login/home/datatable/datatable_page.dart';
+import 'package:flutter_login/home/draggable/draggable_demo.dart';
+import 'package:flutter_login/home/tabs/expansion_demo.dart';
 import 'package:flutter_login/home/tabs/view/follow_the_leader.dart';
 import 'package:flutter_login/home/tabs/view/my_custom_painter.dart';
+import 'package:flutter_login/home/tabs/view/my_singlechildLayoutdelegate.dart';
+import 'package:flutter_login/utils/navigator_util.dart';
 import 'package:flutter_login/utils/toast.dart';
 
 class CategoriesPage extends StatefulWidget {
@@ -15,6 +21,10 @@ class CategoriesPageState extends State<CategoriesPage>
   TabController tabController;
   AnimationController animationController;
   var _checkValue = false;
+
+  var _value = "语文";
+  AnimationController fadeTransitionController;
+  Animation<double> fadeTransitionAnimation;
 
   @override
   void initState() {
@@ -34,12 +44,19 @@ class CategoriesPageState extends State<CategoriesPage>
             }
           });
     animationController.forward();
+
+    ///淡入淡出动画
+     fadeTransitionController =
+        AnimationController(vsync: this, duration: Duration(seconds: 5))..repeat();
+    fadeTransitionAnimation=Tween(begin: 0.0,end: 1.0).animate(fadeTransitionController);
+    fadeTransitionController.forward();
   }
 
   @override
   void dispose() {
     super.dispose();
     tabController.dispose();
+    fadeTransitionController.dispose();
   }
 
   @override
@@ -72,7 +89,12 @@ class CategoriesPageState extends State<CategoriesPage>
             spacing: 10,
             runSpacing: 10,
             children: <Widget>[
-              MyButton(text: 'warp组件'),
+              MyButton(
+                text: 'Warp组件',
+                onPressed: () {
+                  NavigatorUtil.push(context, ExpansionDemo());
+                },
+              ),
               MyButton(text: 'button组件'),
               MyButton(text: 'ListView组件'),
               MyButton(text: 'GridView组件'),
@@ -169,7 +191,41 @@ class CategoriesPageState extends State<CategoriesPage>
                   ],
                 ),
               ),
+              Container(
+                height: 100,
+                width: 100,
+                color: Colors.blue,
+                child: CustomSingleChildLayout(
+                  delegate: MySingleChildLayoutDelegate(Offset(20, 10)),
+                  child: Container(
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+              Container(
+                width: 50,
+                height: 50,
+                color: Colors.red,
 
+                ///定义文本的方向，默认文本从左到右，但有些国家的文字从右到左，比如阿拉伯
+                child: Directionality(
+                  textDirection: TextDirection.rtl,
+                  child: Text("吼吼"),
+                ),
+              ),
+
+              ///Dismissible 组件可通过左滑或者右滑清除列表项
+              Dismissible(
+                ///confirmDismiss 参数确认是否移除组件，
+                confirmDismiss: (DismissDirection direction) async {
+                  return false;
+                },
+                key: ValueKey('key'),
+                child: Container(
+                  height: 80,
+                  color: Colors.red,
+                ),
+              ),
             ],
           ),
           Column(
@@ -196,29 +252,220 @@ class CategoriesPageState extends State<CategoriesPage>
                 },
                 child: Text('FlatButton'),
               ),
+
               OutlineButton(
                 child: Text('OutlineButton'),
-                onPressed: () => null,
+                onPressed: () => NavigatorUtil.push(context, DraggableDemo()),
               ),
               ButtonBar(
                 alignment: MainAxisAlignment.center,
                 children: <Widget>[
                   FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      DefaultAssetBundle.of(context)
+                          .loadString("assets/json/update.json")
+                          .then((value) {
+                        print(value);
+                      });
+                    },
                     child: Text('FlatButton'),
                   ),
                   OutlineButton(
                     child: Text('OutlineButton'),
-                    onPressed: () => null,
+                    onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DataTableDemo()))
+                        .then((value) {
+                      //强制竖屏
+                      SystemChrome.setPreferredOrientations(
+                          [DeviceOrientation.portraitUp]);
+                    }),
                   ),
                   RaisedButton(
                     child: Text('RaisedButton'),
-                    onPressed: () {},
+                    onPressed: () {
+                      NavigatorUtil.push(context, DataTablePage());
+                    },
                   )
                 ],
               ),
-              CustomPaint(
-                painter: MyCustomPainter(),
+
+              ///实现组件拖动
+              Draggable(
+                ///控制拖动的方向
+                axis: Axis.vertical,
+
+                ///回调事件(4种)
+                ///开始拖动时回调
+                onDragStarted: () {},
+
+                ///拖动结束时回调
+                onDragEnd: (DraggableDetails details) {
+                  print("${details.offset}");
+                },
+
+                ///未拖动到 DragTarget 控件上时回调
+                onDraggableCanceled: (velocity, offset) {
+                  print("$velocity:$offset");
+                },
+
+                ///拖动到 DragTarget 控件上时回调
+                onDragCompleted: () {},
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Text('哇哇哇'),
+                ),
+
+                ///拖动的时候子组件显示其他样式
+                childWhenDragging: Container(
+                  width: 50,
+                  height: 50,
+                  child: Text(
+                    '哈哈哈',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+                feedback: Container(
+                  width: 50,
+                  height: 50,
+                  child: Text('哇哇哇'),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+
+              /// DropdownButtonFormField 是一个组合控件，将[DropdownButton]包装在FormField 中
+              DropdownButtonFormField(
+                hint: Text("请选择"),
+                value: _value,
+                items: [
+                  DropdownMenuItem(
+                    child: Text('语文'),
+                    value: '语文',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('数学'),
+                    value: '数学',
+                  ),
+                  DropdownMenuItem(
+                    child: Text('英语'),
+                    value: '英语',
+                  )
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _value = value;
+                  });
+                },
+                selectedItemBuilder: (context) {
+                  return [
+                    OutlineButton(
+                      child: Text('语文'),
+                      onPressed: () {},
+                    ),
+                    OutlineButton(
+                      child: Text('数学'),
+                      onPressed: () {},
+                    ),
+                    OutlineButton(
+                      child: Text('英语'),
+                      onPressed: () {},
+                    ),
+                  ];
+                },
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  myDropdownButton(),
+                  DropdownButtonHideUnderline(
+                    child: myDropdownButton(),
+                  )
+                ],
+              ),
+              FadeTransition(
+                opacity: fadeTransitionAnimation,
+                child: Container(
+                  color: Colors.red,
+                  width: 50,
+                  height: 50,
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10,bottom: 10),
+                width: 50,
+                height: 50,
+                color: Colors.green,
+                ///当子组件的宽高比和父组件的宽高比不一样时，我们等比拉伸或者填充父组件
+                child: FittedBox(
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+              Row(
+                children: <Widget>[
+                  ///Flexible 组件可以控制 Row、Column、Flex 的子控件占满父控件
+                  ///子控件占比 = 当前子控件 flex/所有子控件 flex 之和
+                  ///Flexible 中 fit 参数表示填满剩余空间的方式
+                  ///tight：必须（强制）填满剩余空间。
+                  ///loose：尽可能大的填满剩余空间，但是可以不填满。
+                  ///填满剩余空间直接使用 Expanded 更方便
+                  Flexible(
+                    flex: 1,
+                    child:  Container(
+                      color: Colors.blue,
+                      height: 50,
+                    ),
+                  ),
+                  ///Spacer 的子控件尺寸是 0，Spacer 适用于撑开 Row、Column、Flex 的子控件的空隙
+                  Spacer(
+                    flex: 1,
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Container(
+                      color: Colors.red,
+                      height: 50,
+                    ),
+                  ),
+                  Spacer(
+                    flex: 1,
+                  ),
+                Flexible(
+                  flex: 3,
+                  child:   Container(
+                    color: Colors.blue,
+                    height: 50,
+                  ),
+                )
+                ],
+              ),
+              Container(
+                width: 100,
+                height: 100,
+                color: Colors.blue,
+                ///根据 Offset 平移控件
+                child: FractionalTranslation(
+                  translation: Offset(0.25,0.2),
+                  child: Container(
+                    color: Colors.red,
+                  ),
+                ),
               )
             ],
           ),
@@ -351,6 +598,31 @@ class CategoriesPageState extends State<CategoriesPage>
     );
   }
 
+  /// 组合控件
+  Widget myDropdownButton() {
+    return DropdownButton(
+      value: _value,
+      underline: Divider(
+        color: Colors.red,
+        height: 5,
+        thickness: 5,
+      ),
+      items: [
+        DropdownMenuItem(
+          child: Text('语文'),
+          value: '语文',
+        ),
+        DropdownMenuItem(child: Text('数学'), value: '数学'),
+        DropdownMenuItem(child: Text('英语'), value: '英语'),
+      ],
+      onChanged: (value) {
+        setState(() {
+          _value = value;
+        });
+      },
+    );
+  }
+
   ///输入框
   Widget inputContent() {
     return TextField(
@@ -385,13 +657,14 @@ class CategoriesPageState extends State<CategoriesPage>
 
 class MyButton extends StatelessWidget {
   final String text;
+  final VoidCallback onPressed;
 
-  const MyButton({Key key, this.text}) : super(key: key);
+  const MyButton({Key key, this.text, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       child: Text(this.text),
       textColor: Theme.of(context).accentColor,
     );

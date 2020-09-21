@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_login/home/tabs/view/my_custom_painter.dart';
 import 'package:flutter_login/utils/toast.dart';
 
 class ContactsPage extends StatefulWidget {
@@ -77,6 +78,7 @@ class ContactsPageState extends State<ContactsPage> {
                     height: 100,
                   ),
                 ),
+
                 Expanded(
                   ///可以实现类似滤镜效果
                   child: ColorFiltered(
@@ -214,7 +216,8 @@ class ContactsPageState extends State<ContactsPage> {
                   width: 2,
                 ),
               ),
-            )
+            ),
+
 
           ],
         ));

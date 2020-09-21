@@ -197,6 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: BoxDecoration(color: Colors.grey),
                         ),
                       ),
+
                       Expanded(
                         child: FlatButton(
                           onPressed: () =>NavigatorUtil.push(context, RegisterPage()),

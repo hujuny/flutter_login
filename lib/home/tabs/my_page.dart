@@ -39,12 +39,69 @@ class MyPageState extends State<MyPage> {
   }
 
   showUpdateDialog(versionName, description) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(versionName),
+            content: Text(description),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.pop(context, "cancle"); //对话框消失
+                },
+              ),
+              FlatButton(
+                child: Text('确定'),
+                onPressed: () {
+                  Navigator.pop(context, "ok"); //对话框消失
+                },
+              ),
+            ],
+          );
+        });
+  }
 
+  showSimpleDialog() async {
+    var result = await showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: Text('提示'),
+            children: <Widget>[
+              Container(
+                height: 80,
+                alignment: Alignment.center,
+                child: Text('确认删除吗？'),
+              ),
+              Divider(
+                height: 1,
+              ),
+
+              FlatButton(
+                child: Text('取消'),
+                onPressed: () {
+                  Navigator.of(context).pop('cancel');
+                },
+              ),
+              Divider(
+                height: 1,
+              ),
+              FlatButton(
+                child: Text('确认'),
+                onPressed: () {
+                  Navigator.of(context).pop('ok');
+                },
+              ),
+            ],
+          );
+        });
+    print(result);
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -88,6 +145,9 @@ class MyPageState extends State<MyPage> {
                     onTap: () {
                       if (index == 3) {
                         getUpdateInformation();
+                      }
+                      if (index == 2) {
+                        showSimpleDialog();
                       }
                     },
                     leading: Image.asset(

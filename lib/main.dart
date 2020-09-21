@@ -9,6 +9,12 @@ import 'home/home_page.dart';
 import 'login/login_page.dart';
 
 void main() {
+  ///默认Flutter错误页面是红色背景提示的错误信息
+  ErrorWidget.builder = (FlutterErrorDetails flutterErrorDetails){
+    print(flutterErrorDetails.toString());
+    return Center(
+      child: Text(flutterErrorDetails.exceptionAsString()), );
+  };
   runApp(MyApp());
 
   if (Platform.isAndroid) {

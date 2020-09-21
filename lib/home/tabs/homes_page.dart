@@ -149,7 +149,7 @@ class HomesPageState extends State<HomesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('收页'),
+          title: Text('首页'),
           centerTitle: true,
         ),
         body: ListView(
